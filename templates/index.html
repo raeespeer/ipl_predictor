@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>IPL Predictor Game</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min
+  .js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        
+        #banner {
+            background-image:url('./stad.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            color: #fff;
+            height:100%;
+            max-width:1379px;
+            
+        
+            padding-bottom:100px;
+        }
+
+    
+        .banner-box {
+            margin:auto;
+            position: relative;
+            border-radius: 20px;
+            background: black;
+            max-width: 40%;
+            border-radius: 2px white;
+            box-shadow: 4px 0 4px 4px black;
+            font-weight: 600;
+            margin-top: 40px;
+            
+        }
+
+        #banner .login-control {
+            outline: none;
+            box-sizing: border-box;
+         
+            font-weight: bold;
+            background: #F6F7F9;
+            margin-top: 5px;
+            border: none;
+        }
+
+        #banner .btn-primary {
+
+            color: black;
+            background-color: white;
+            padding: 8px 20px;
+            border: none;
+            margin-top: 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: inset 0 0 0 0 black;
+            text-decoration: none;
+            transition: ease-out 1s;
+            outline: none;
+            margin-top: 15px;
+            width: 150px;
+            margin-bottom: 5px;
+
+        }
+
+        #banner .btn-primary:hover {
+            border: none;
+            color: white;
+            text-decoration: none;
+            box-shadow: inset 400px 0 0 0 silver;
+        }
+
+        #banner .sign:hover {
+            border: none;
+            color: white;
+            text-decoration: none;
+            box-shadow: inset 0 400px 0 0 gold;
+        }
+
+    
+    </style>
+
+
+</head>
+
+<body>
+    <div id="banner">
+        <div class="row text-center">
+         
+            
+            <div class="col-md-6 banner-box" id="signin">
+                <!-- Main Input For Receiving Query to our ML -->
+                
+                <form action="{{ url_for('predict')}}" method="post">
+
+
+
+                    <h2>Welcome to IPL GAME Predictor</h2>
+
+                    <br><label>Your Team
+                        <br><select id="select1" onchange="team1()" name="tem1" class="login-control" required>
+                            <option selected> Select your Playing Team</option>
+                            <option value="KKR">KKR</option>
+                            <option value="RCB">RCB</option>
+                            <option value="DCS">DCS</option>
+                            <option value="KXIP">KXIP</option>
+                            <option value="RR">RR</option>
+                            <option value="MI">MI</option>
+                            <option value="SRH">SRH</option>
+                            <option value="CSK">CSK</option>
+
+
+                        </select>
+                        <br><label>
+                            Opponent
+                            <br><select id="select2" name="tem2" onchange="team2()" class="login-control" required>
+                                <option selected> Select your Opponent Team</option>
+                                <option value="KKR">KKR</option>
+                                <option value="RCB">RCB</option>
+                                <option value="DCS">DCS</option>
+                                <option value="KXIP">KXIP</option>
+                                <option value="RR">RR</option>
+                                <option value="MI">MI</option>
+                                <option value="SRH">SRH</option>
+                                <option value="CSK">CSK</option>
+
+                            </select>
+                        </label>
+                        <br><label>
+                            Choose your TOSS winning team
+                            <br><select id="disp" name="win" class="login-control" required>
+                                <option selected> Select Your Toss Winning Team</option>
+
+                            </select>
+
+                        </label>
+                        <br>
+                        <label>
+                            Choose to ?
+                        <br>    <select name="toss" id="" class="login-control" required>
+                                <option selected>Batting or Fielding?</option>
+                                <option value="field">field</option>
+                                <option value="bat">bat</option>
+                            </select>
+
+                        </label>
+                        <br>
+                        Select Stadium
+                        <select name="venue" id="" class="login-control" required>
+                            
+                            <option value="" selected>Select Stadium</option>
+                            <option value="Rajiv Gandhi International Stadium, Uppal">Rajiv Gandhi International Stadium, Uppal</option>
+                            <option value="Maharashtra Cricket Association Stadium">Maharashtra Cricket Association Stadium</option>
+                            <option value="Saurashtra Cricket Association Stadium">Saurashtra Cricket Association Stadium</option>
+                            <option value="Holkar Cricket Stadium">Holkar Cricket Stadium</option>
+                            <option value="M Chinnaswamy Stadium">M Chinnaswamy Stadium</option>
+                            <option value="Wankhede Stadium">Wankhede Stadium</option>
+                            <option value="Eden Gardens">Eden Gardens</option>
+                            <option value="Feroz Shah Kotla">Feroz Shah Kotla</option>
+                            <option value="Punjab Cricket Association IS Bindra Stadium, Mohali">Punjab Cricket Association IS Bindra Stadium, Mohali</option>
+                            <option value="Green Park">Green Park</option>
+                            <option value="Punjab Cricket Association Stadium, Mohali">Punjab Cricket Association Stadium, Mohali</option>
+                            <option value="Sawai Mansingh Stadium">Sawai Mansingh Stadium</option>
+                            <option value="MA Chidambaram Stadium, Chepauk">MA Chidambaram Stadium, Chepauk</option>
+                            <option value="Dr DY Patil Sports Academy">Dr DY Patil Sports Academy</option>
+                            <option value="Newlands">Newlands</option>
+                            <option value="St George's Park">St George's Park</option>
+                            <option value="Kingsmead">Kingsmead</option>
+                            <option value="SuperSport Park">SuperSport Park</option>
+                            <option value="Buffalo Park">Buffalo Park</option>
+                            <option value="New Wanderers Stadium">New Wanderers Stadium</option>
+                            <option value="De Beers Diamond Ova">De Beers Diamond Oval</option>
+                            <option value="OUTsurance Oval">OUTsurance Oval</option>
+                            <option value="Brabourne Stadium">Brabourne Stadium</option>
+                            <option value="Sardar Patel Stadium, Motera">Sardar Patel Stadium, Motera</option>
+                            <option value="Barabati Stadium">Barabati Stadium</option>
+                            <option value="Vidarbha Cricket Association Stadium, Jamtha">Vidarbha Cricket Association Stadium, Jamtha</option>
+                            <option value="Himachal Pradesh Cricket Association Stadium">Himachal Pradesh Cricket Association Stadium</option>
+                            <option value="Nehru Stadium">Nehru Stadium</option>
+                            <option value="Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium">Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium</option>
+                            <option value="Subrata Roy Sahara Stadium">Subrata Roy Sahara Stadium</option>
+                            <option value="Shaheed Veer Narayan Singh International Stadium">Shaheed Veer Narayan Singh International Stadium</option>
+                            <option value="JSCA International Stadium Complex">JSCA International Stadium Complex</option>
+                            <option value="Sheikh Zayed Stadium">Sheikh Zayed Stadium</option>
+                            <option value="Sharjah Cricket Stadium">Sharjah Cricket Stadium</option>
+                            <option value="Dubai International Cricket Stadium">Dubai International Cricket Stadium</option>
+                            <option value="M. A. Chidambaram Stadium">M. A. Chidambaram Stadium</option>
+                            <option value="Feroz Shah Kotla Ground">Feroz Shah Kotla Ground</option>
+                            <option value="M. Chinnaswamy Stadium">M. Chinnaswamy Stadium</option>
+                            <option value="Rajiv Gandhi Intl. Cricket Stadium">Rajiv Gandhi Intl. Cricket Stadium</option>
+                            <option value="IS Bindra Stadium">IS Bindra Stadium</option>
+                            <option value="ACA-VDCA Stadium">ACA-VDCA Stadium</option>
+                        </select>
+
+
+                        <button type="submit" onsubmit="clr()" class="btn btn-primary sign">Predict</button>
+                </form>
+
+                <br>
+                <br>
+                {{ prediction_text }}
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+<script>
+    function team1() {
+        var obj1 = document.getElementById("select1");
+        var display = document.getElementById("disp");
+        
+
+        var sel1 = obj1.options[obj1.selectedIndex].text;
+
+        var opt1 = document.createElement("option");
+
+        opt1.text = sel1;
+
+        display.add(opt1);
+
+    }
+
+    function team2() {
+
+        var obj2 = document.getElementById("select2");
+        var display = document.getElementById("disp");
+      
+        var sel2 = obj2.options[obj2.selectedIndex].text;
+        var opt2 = document.createElement("option");
+        opt2.text = sel2;
+        display.add(opt2);
+    }
+
+    function clr()
+    {
+        var display = document.getElementById("disp");
+        length = display.length
+        for (i = length-1; i >= 1; i--) {
+            display.options[i] = null;
+        }
+    }
+</script>
+
+
+</html>
